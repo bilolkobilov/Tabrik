@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navroʻz va Juma Tabrik</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Dancing+Script:wght@700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #2c7a2c;
+            --secondary-color: #8bc34a;
+            --accent-color: #ff7043;
+            --highlight-color: #d63384;
+            --light-color: #f9f7f1;
+            --gold-color: #ffd700;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0f0c29;
+            background: linear-gradient(-45deg, #24243e, #0f0c29, #1a4f3c, #2c7744);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            animation: floatParticle 10s linear infinite, fadeInOut 10s ease-in-out infinite;
+        }
+        
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-100px) translateX(50px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(-150px) translateX(100px) rotate(180deg);
+            }
+            75% {
+                transform: translateY(-100px) translateX(150px) rotate(270deg);
+            }
+            100% {
+                transform: translateY(0) translateX(200px) rotate(360deg);
+            }
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 0;
+            }
+            25%, 75% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2),
+                        0 0 30px rgba(139, 195, 74, 0.2),
+                        inset 0 0 15px rgba(255, 255, 255, 0.5);
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: all 0.5s ease;
+        }
+        
+        .container:hover {
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3),
+                        0 0 40px rgba(139, 195, 74, 0.3),
+                        inset 0 0 20px rgba(255, 255, 255, 0.6);
+            transform: translateY(-5px);
+        }
+        
+        .border-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid var(--secondary-color);
+            border-radius: 25px;
+            z-index: -1;
+            pointer-events: none;
+            margin: 15px;
+            opacity: 0.7;
+        }
+        
+        .border-decoration::before,
+        .border-decoration::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--gold-color);
+            opacity: 0.7;
+        }
+        
+        .border-decoration::before {
+            top: -15px;
+            left: -15px;
+            border-right: none;
+            border-bottom: none;
+            border-radius: 10px 0 0 0;
+        }
+        
+        .border-decoration::after {
+            bottom: -15px;
+            right: -15px;
+            border-left: none;
+            border-top: none;
+            border-radius: 0 0 10px 0;
+        }
+        
+        .flower-decoration {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.8;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+        
+        .flower-top-left {
+            top: -50px;
+            left: -50px;
+            transform: rotate(-30deg);
+        }
+        
+        .flower-top-right {
+            top: -40px;
+            right: -40px;
+            transform: rotate(30deg) scale(0.8);
+        }
+        
+        .flower-bottom-left {
+            bottom: -40px;
+            left: -40px;
+            transform: rotate(-120deg) scale(0.8);
+        }
+        
+        .flower-bottom-right {
+            bottom: -50px;
+            right: -50px;
+            transform: rotate(120deg);
+        }
+        
+        .container:hover .flower-decoration {
+            filter: saturate(1.2) brightness(1.1);
+            transform-origin: center;
+        }
+        
+        .container:hover .flower-top-left {
+            transform: rotate(-25deg) scale(1.05);
+        }
+        
+        .container:hover .flower-top-right {
+            transform: rotate(35deg) scale(0.85);
+        }
+        
+        .container:hover .flower-bottom-left {
+            transform: rotate(-115deg) scale(0.85);
+        }
+        
+        .container:hover .flower-bottom-right {
+            transform: rotate(125deg) scale(1.05);
+        }
+        
+        .glow-effect {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(255,215,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .header {
+            position: relative;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 42px;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.1),
+                         0 0 10px rgba(139, 195, 74, 0.2);
+            position: relative;
+            transform-style: preserve-3d;
+        }
+        
+        h1 .emoji {
+            display: inline-block;
+            font-size: 35px;
+            transform: translateZ(20px);
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: translateZ(20px) scale(1);
+            }
+            50% {
+                transform: translateZ(20px) scale(1.1);
+            }
+        }
+        
+        .ornament {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .ornament-line {
+            height: 2px;
+            width: 100px;
+            background: linear-gradient(to right, transparent, var(--gold-color), transparent);
+        }
+        
+        .ornament-symbol {
+            margin: 0 15px;
+            color: var(--gold-color);
+            font-size: 20px;
+        }
+        
+        .message-container {
+            position: relative;
+            margin-bottom: 30px;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+        
+        .message {
+            position: relative;
+            font-size: 18px;
+            color: #333;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 0 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .message:hover {
+            transform: translateZ(5px);
+            color: #000;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+        
+        .highlight {
+            position: relative;
+            color: var(--highlight-color);
+            font-weight: 500;
+            display: inline-block;
+            padding: 0 8px;
+            z-index: 1;
+        }
+        
+        .highlight::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 2px;
+            height: 8px;
+            background: linear-gradient(120deg, rgba(255,215,0,0.2) 0%, rgba(255,215,0,0.4) 50%, rgba(255,215,0,0.2) 100%);
+            z-index: -1;
+            border-radius: 4px;
+            transform: translateZ(-5px);
+            transition: all 0.3s ease;
+        }
+        
+        .highlight:hover::before {
+            height: 12px;
+            background: linear-gradient(120deg, rgba(255,215,0,0.3) 0%, rgba(255,215,0,0.6) 50%, rgba(255,215,0,0.3) 100%);
+        }
+        
+        .blessing-container {
+            position: relative;
+            margin-top: 40px;
+            padding: 20px 0;
+            text-align: center;
+            transform-style: preserve-3d;
+        }
+        
+        .blessing {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(139, 195, 74, 0.4),
+                        0 0 10px rgba(139, 195, 74, 0.2);
+            transform: translateZ(20px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .blessing::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.8s ease;
+        }
+        
+        .blessing:hover {
+            transform: translateZ(25px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(139, 195, 74, 0.5),
+                        0 0 15px rgba(139, 195, 74, 0.3);
+        }
+        
+        .blessing:hover::before {
+            animation: shine 1.5s infinite;
+        }
+        
+        @keyframes shine {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+        
+        .footer {
+            margin-top: 40px;
+            font-size: 16px;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            position: relative;
+        }
+        
+        .date-badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 15px;
+            background: rgba(44, 122, 44, 0.1);
+            border-radius: 20px;
+            color: var(--primary-color);
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid rgba(44, 122, 44, 0.2);
+        }
+        
+        .tulip-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 80px;
+            opacity: 0.7;
+            transform: rotate(15deg);
+            transition: all 0.3s ease;
+        }
+        
+        .tulip-container:hover {
+            transform: rotate(5deg) scale(1.1);
+            opacity: 0.9;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 25px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            .message {
+                font-size: 16px;
+            }
+            
+            .blessing {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+            
+            .flower-decoration {
+                transform: scale(0.7);
+            }
+            
+            .flower-top-left {
+                top: -35px;
+                left: -35px;
+            }
+            
+            .flower-top-right {
+                top: -25px;
+                right: -25px;
+            }
+            
+            .flower-bottom-left {
+                bottom: -25px;
+                left: -25px;
+            }
+            
+            .flower-bottom-right {
+                bottom: -35px;
+                right: -35px;
+            }
+            
+            .ornament-line {
+                width: 70px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .message {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            
+            .blessing {
+                padding: 10px 25px;
+                font-size: 15px;
+            }
+            
+            .flower-decoration {
+                transform: scale(0.6);
+            }
+            
+            .ornament-line {
+                width: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="border-decoration"></div>
+        
+        <svg class="flower-decoration flower-top-left" width="150" height="150" viewBox="0 0 100 100">
+            <defs>
+                <radialGradient id="center1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                    <stop offset="0%" style="stop-color:#FFC107" />
+                    <stop offset="100%" style="stop-color:#FFD54F" />
+                </radialGradient>
+                <linearGradient id="petal1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#8BC34A" />
+                    <stop offset="100%" style="stop-color:#4CAF50" />
+                </linearGradient>
+            </defs>
+            <path d="M50,50 C65,35 80,40 85,50 C80,60 65,65 50,50" fill="url(#petal1)" />
+            <path d="M50,50 C35,35 40,20 50,15 C60,20 65,35 50,50" fill="url(#petal1)" transform="rotate(90 50 50)" />
+            <path d="M50,50 C35,65 20,60 15,50 C20,40 35,35 50,50" fill="url(#petal1)" transform="rotate(180 50 50)" />
+            <path d="M50,50 C65,65 60,80 50,85 C40,80 35,65 50,50" fill="url(#petal1)" transform="rotate(270 50 50)" />
+            <circle cx="50" cy="50" r="12" fill="url(#center1)" />
+            <circle cx="50" cy="50" r="6" fill="#FF9800" />
+        </svg>
+        
+        <svg class="flower-decoration flower-top-right" width="120" height="120" viewBox="0 0 100 100">
+            <defs>
+                <radialGradient id="center2" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                    <stop offset="0%" style="stop-color:#FFEB3B" />
+                    <stop offset="100%" style="stop-color:#FFC107" />
+                </radialGradient>
+                <linearGradient id="petal2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FF9800" />
+                    <stop offset="100%" style="stop-color:#FF5722" />
+                </linearGradient>
+            </defs>
+            <path d="M50,50 C65,35 80,40 85,50 C80,60 65,65 50,50" fill="url(#petal2)" />
+            <path d="M50,50 C35,35 40,20 50,15 C60,20 65,35 50,50" fill="url(#petal2)" transform="rotate(90 50 50)" />
+            <path d="M50,50 C35,65 20,60 15,50 C20,40 35,35 50,50" fill="url(#petal2)" transform="rotate(180 50 50)" />
+            <path d="M50,50 C65,65 60,80 50,85 C40,80 35,65 50,50" fill="url(#petal2)" transform="rotate(270 50 50)" />
+            <circle cx="50" cy="50" r="12" fill="url(#center2)" />
+            <circle cx="50" cy="50" r="6" fill="#FFC107" />
+        </svg>
+        
+        <svg class="flower-decoration flower-bottom-left" width="120" height="120" viewBox="0 0 100 100">
+            <defs>
+                <radialGradient id="center3" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                    <stop offset="0%" style="stop-color:#E91E63" />
+                    <stop offset="100%" style="stop-color:#F48FB1" />
+                </radialGradient>
+                <linearGradient id="petal3" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#9C27B0" />
+                    <stop offset="100%" style="stop-color:#BA68C8" />
+                </linearGradient>
+            </defs>
+            <path d="M50,50 C65,35 80,40 85,50 C80,60 65,65 50,50" fill="url(#petal3)" />
+            <path d="M50,50 C35,35 40,20 50,15 C60,20 65,35 50,50" fill="url(#petal3)" transform="rotate(90 50 50)" />
+            <path d="M50,50 C35,65 20,60 15,50 C20,40 35,35 50,50" fill="url(#petal3)" transform="rotate(180 50 50)" />
+            <path d="M50,50 C65,65 60,80 50,85 C40,80 35,65 50,50" fill="url(#petal3)" transform="rotate(270 50 50)" />
+            <circle cx="50" cy="50" r="12" fill="url(#center3)" />
+            <circle cx="50" cy="50" r="6" fill="#E91E63" />
+        </svg>
+        
+        <svg class="flower-decoration flower-bottom-right" width="150" height="150" viewBox="0 0 100 100">
+            <defs>
+                <radialGradient id="center4" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                    <stop offset="0%" style="stop-color:#4CAF50" />
+                    <stop offset="100%" style="stop-color:#8BC34A" />
+                </radialGradient>
+                <linearGradient id="petal4" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#2196F3" />
+                    <stop offset="100%" style="stop-color:#64B5F6" />
+                </linearGradient>
+            </defs>
+            <path d="M50,50 C65,35 80,40 85,50 C80,60 65,65 50,50" fill="url(#petal4)" />
+            <path d="M50,50 C35,35 40,20 50,15 C60,20 65,35 50,50" fill="url(#petal4)" transform="rotate(90 50 50)" />
+            <path d="M50,50 C35,65 20,60 15,50 C20,40 35,35 50,50" fill="url(#petal4)" transform="rotate(180 50 50)" />
+            <path d="M50,50 C65,65 60,80 50,85 C40,80 35,65 50,50" fill="url(#petal4)" transform="rotate(270 50 50)" />
+            <circle cx="50" cy="50" r="12" fill="url(#center4)" />
+            <circle cx="50" cy="50" r="6" fill="#2196F3" />
+        </svg>
+        
+        <div class="header">
+            <h1 class="animate__animated animate__fadeIn">
+                <span class="emoji">🌸</span> 
+                Navroʻz va Juma ayyomingiz muborak bo'lsin! 
+                <span class="emoji">🌸</span>
+            </h1>
+            
+            <div class="ornament">
+                <div class="ornament-line"></div>
+                <div class="ornament-symbol">✿</div>
+                <div class="ornament-line"></div>
+            </div>
+        </div>
+        
+        <div class="message-container">
+            <p class="message animate__animated animate__fadeIn" style="animation-delay: 0.3s">
+                Yangi kun – <span class="highlight">Navroʻz bayrami</span> va muborak <span class="highlight">Juma kuni</span> barchamizga baxt, sogʻlik, tinchlik va fayz olib kelsin!
+            </p>
+            
+            <p class="message animate__animated animate__fadeIn" style="animation-delay: 0.6s">
+                Bahor nafasi bilan uyg'ongan tabiat kabi, qalbingizda ham yangilanish, umid va kelажak orzulari gullab-yashnаsin.
+            </p>
+            
+            <p class="message animate__animated animate__fadeIn" style="animation-delay: 0.9s">
+                Ushbu qo'sh bayram kunida sizga va oila a'zolaringizga sog'lik-salomatlik, xonadoningizga fayzu baraka tilaymiz.
+            </p>
+            
+            <p class="message animate__animated animate__fadeIn" style="animation-delay: 1.2s">
+                Yaxshi niyatlaringiz ijobat bo'lib, hayotingiz doimo quvonch va barakaga to'lsin.
+            </p>
+        </div>
+        
+        <div class="blessing-container">
+            <div class="blessing animate__animated animate__bounceIn" style="animation-delay: 1.5s">
+                Navroʻz muborak, aziz yurtdoshlar!
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Bahor bayrami qutlug' bo'lsin!</p>
+            <div class="date-badge">2025-yil, 21-mart</div>
+        </div>
+        
+        <svg class="tulip-container" viewBox="0 0 100 160">
+            <path d="M50,100 L50,150" stroke="#2E7D32" stroke-width="4" stroke-linecap="round" />
+            <path d="M50,150 C45,140 40,145 40,155" stroke="#2E7D32" stroke-width="2" fill="none" />
+            <path d="M50,150 C55,140 60,145 60,155" stroke="#2E7D32" stroke-width="2" fill="none" />
+            <path d="M50,100 C30,80 30,50 50,30 C70,50 70,80 50,100" fill="#E91E63" />
+            <path d="M50,100 C30,80 30,50 50,30" fill="none" stroke="#C2185B" stroke-width="1" />
+            <path d="M50,100 C70,80 70,50 50,30" fill="none" stroke="#C2185B" stroke-width="1" />
+        </svg>
+        
+        <div class="glow-effect"></div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create floating particles
+            createParticles();
+            
+            // Track mouse movement for container parallax effect
+            const container = document.querySelector('.container');
+            document.addEventListener('mousemove', function(e) {
+                parallaxEffect(e, container);
+                moveGlowEffect(e);
+            });
+            
+            // Add click effect to blessing button
+            const blessing = document.querySelector('.blessing');
+            blessing.addEventListener('click', function() {
+                this.classList.add('animate__animated', 'animate__heartBeat');
+                setTimeout(() => {
+                    this.classList.remove('animate__animated', 'animate__heartBeat');
+                }, 1000);
+                
+                // Create celebration particles
+                createCelebrationParticles();
+            });
+        });
+        
+        function createParticles() {
+            const particles = ['✿', '❀', '✽', '❁', '✾', '✺', '❃'];
+            const colors = ['#E91E63', '#9C27B0', '#4CAF50', '#FF9800', '#2196F3', '#8BC34A'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.innerHTML = particles[Math.floor(Math.random() * particles.length)];
+                    particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+                    particle.style.fontSize = Math.floor(Math.random() * 16 + 14) + 'px';
+                    particle.style.left = Math.random() * 100 + 'vw';
+                    particle.style.top = Math.random() * 100 + 'vh';
+                    particle.style.animationDuration = Math.random() * 15 + 10 + 's';
+                    particle.style.animationDelay = Math.random() * 5 + 's';
+                    
+                    document.body.appendChild(particle);
+                    
+                    // Remove particle after animation completes
+                    setTimeout(() => {
+                        document.body.removeChild(particle);
+                        createParticle(); // Create a new particle to replace it
+                    }, 25000);
+                }, i * 200);
+            }
+        }
+        
+        function createParticle() {
+            const particles = ['✿', '❀', '✽', '❁', '✾', '✺', '❃'];
+            const colors = ['#E91E63', '#9C27B0', '#4CAF50', '#FF9800', '#2196F3', '#8BC34A'];
+            
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.innerHTML = particles[Math.floor(Math.random() * particles.length)];
+            particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.fontSize = Math.floor(Math.random() * 16 + 14) + 'px';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = '100vh';
+            particle.style.animationDuration = Math.random() * 15 + 10 + 's';
+            
+            document.body.appendChild(particle);
+            
+            // Remove particle after animation completes
+            setTimeout(() => {
+                document.body.removeChild(particle);
+                createParticle(); // Create another particle to keep a constant number
+            }, 25000);
+        }
+        
+        function createCelebrationParticles() {
+            const container = document.querySelector('.container');
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const particles = ['✿', '❀', '✽', '❁', '✾', '✺', '❃', '✨', '🎉', '🎊'];
+            const colors = ['#E91E63', '#9C27B0', '#4CAF50', '#FF9800', '#2196F3', '#8BC34A', '#FFC107', '#E040FB
