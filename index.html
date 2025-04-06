@@ -417,6 +417,47 @@
             opacity: 0.9;
         }
         
+        /* Fireworks styles */
+        .firework {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0.5px;
+            height: 0.5px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+        }
+        
+        .particle-firework {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            mix-blend-mode: screen;
+            animation: firework-anim 1s forwards cubic-bezier(0.445, 0.05, 0.55, 0.95);
+            transform-origin: center;
+        }
+        
+        @keyframes firework-anim {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+                width: 0;
+                height: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y));
+                opacity: 0;
+                width: 6px;
+                height: 6px;
+            }
+        }
+        
         /* Responsive Styles */
         @media (max-width: 768px) {
             .container {
@@ -629,17 +670,18 @@
         <div class="glow-effect"></div>
     </div>
     
+    <!-- Audio elements for sounds -->
+    <audio id="celebrationSound" preload="auto">
+        <source src="https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/bell_ring.mp3" type="audio/mp3">
+    </audio>
+    <audio id="fireworkSound" preload="auto">
+        <source src="https://cdnjs.cloudflare.com/ajax/libs/ion-sound/3.0.7/sounds/snap.mp3" type="audio/mp3">
+    </audio>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Create floating particles
             createParticles();
-            
-            // Track mouse movement for container parallax effect
-            const container = document.querySelector('.container');
-            document.addEventListener('mousemove', function(e) {
-                parallaxEffect(e, container);
-                moveGlowEffect(e);
-            });
             
             // Add click effect to blessing button
             const blessing = document.querySelector('.blessing');
@@ -651,63 +693,179 @@
                 
                 // Create celebration particles
                 createCelebrationParticles();
+                
+                // Create fireworks when button is clicked
+                createFireworks(20);
+                
+                // Play celebration sound
+                const celebrationSound = document.getElementById('celebrationSound');
+                celebrationSound.currentTime = 0;
+                celebrationSound.play();
             });
         });
         
-        function createParticles() {
-            const particles = ['✿', '❀', '✽', '❁', '✾', '✺', '❃'];
-            const colors = ['#E91E63', '#9C27B0', '#4CAF50', '#FF9800', '#2196F3', '#8BC34A'];
+        function parallaxEffect(e, element) {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
             
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle';
-                    particle.innerHTML = particles[Math.floor(Math.random() * particles.length)];
-                    particle.style.color = colors[Math.floor(Math.random() * colors.length)];
-                    particle.style.fontSize = Math.floor(Math.random() * 16 + 14) + 'px';
-                    particle.style.left = Math.random() * 100 + 'vw';
-                    particle.style.top = Math.random() * 100 + 'vh';
-                    particle.style.animationDuration = Math.random() * 15 + 10 + 's';
-                    particle.style.animationDelay = Math.random() * 5 + 's';
-                    
-                    document.body.appendChild(particle);
-                    
-                    // Remove particle after animation completes
-                    setTimeout(() => {
-                        document.body.removeChild(particle);
-                        createParticle(); // Create a new particle to replace it
-                    }, 25000);
-                }, i * 200);
-            }
+            const centerX = width / 2;
+            const centerY = height / 2;
+            
+            const offsetX = ((mouseX - centerX) / centerX) * 15;
+            const offsetY = ((mouseY - centerY) / centerY) * 15;
+            
+            element.style.transform = `translateY(-5px) rotateX(${-offsetY}deg) rotateY(${offsetX}deg)`;
         }
         
-        function createParticle() {
-            const particles = ['✿', '❀', '✽', '❁', '✾', '✺', '❃'];
-            const colors = ['#E91E63', '#9C27B0', '#4CAF50', '#FF9800', '#2196F3', '#8BC34A'];
-            
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.innerHTML = particles[Math.floor(Math.random() * particles.length)];
-            particle.style.color = colors[Math.floor(Math.random() * colors.length)];
-            particle.style.fontSize = Math.floor(Math.random() * 16 + 14) + 'px';
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.top = '100vh';
-            particle.style.animationDuration = Math.random() * 15 + 10 + 's';
-            
-            document.body.appendChild(particle);
-            
-            // Remove particle after animation completes
-            setTimeout(() => {
-                document.body.removeChild(particle);
-                createParticle(); // Create another particle to keep a constant number
-            }, 25000);
-        }
-        
-        function createCelebrationParticles() {
+        function moveGlowEffect(e) {
+            const glowEffect = document.querySelector('.glow-effect');
             const container = document.querySelector('.container');
             const rect = container.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
             
-            const particles = ['✿', '❀', '✽', '❁', '✾', '✺', '❃', '✨', '🎉', '🎊'];
-            const colors = ['#E91E63', '#9C27B0', '#4CAF50', '#FF9800', '#2196F3', '#8BC34A', '#FFC107', '#E040FB
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+                glowEffect.style.opacity = '1';
+                // This completes the glowEffect function that was cut off
+glowEffect.style.left = `${x}px`;
+glowEffect.style.top = `${y}px`;
+} else {
+    glowEffect.style.opacity = '0';
+}
+}
+
+function createParticles() {
+    const particleCount = 30;
+    const colors = ['#8BC34A', '#4CAF50', '#FFC107', '#FF9800', '#E91E63', '#9C27B0'];
+    const shapes = ['✿', '❀', '✽', '✾', '❁', '❃'];
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Random shape or emoji
+        const useShape = Math.random() > 0.5;
+        if (useShape) {
+            particle.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+            particle.style.fontSize = Math.floor(Math.random() * 20 + 10) + 'px';
+            particle.style.color = colors[Math.floor(Math.random() * colors.length)];
+        } else {
+            particle.style.width = Math.floor(Math.random() * 10 + 5) + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Random starting position
+        const startPositionX = Math.random() * window.innerWidth;
+        const startPositionY = Math.random() * window.innerHeight;
+        particle.style.left = `${startPositionX}px`;
+        particle.style.top = `${startPositionY}px`;
+        
+        // Random delay
+        particle.style.animationDelay = `${Math.random() * 10}s`;
+        
+        document.body.appendChild(particle);
+    }
+}
+
+function createCelebrationParticles() {
+    const container = document.querySelector('.container');
+    const rect = container.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const particleCount = 50;
+    const colors = ['#8BC34A', '#4CAF50', '#FFC107', '#FF9800', '#E91E63', '#9C27B0', '#FFEB3B', '#2196F3'];
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.width = Math.floor(Math.random() * 10 + 5) + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Start from center
+        particle.style.left = `${centerX}px`;
+        particle.style.top = `${centerY}px`;
+        
+        // Animate with no delay but random direction
+        particle.style.animationDelay = '0s';
+        
+        // Modify the animation properties
+        const angle = Math.random() * 360;
+        const distance = Math.random() * 200 + 100;
+        const translateX = Math.cos(angle * Math.PI / 180) * distance;
+        const translateY = Math.sin(angle * Math.PI / 180) * distance;
+        
+        particle.style.setProperty('--x', `${translateX}px`);
+        particle.style.setProperty('--y', `${translateY}px`);
+        
+        document.body.appendChild(particle);
+        
+        // Remove after animation completes
+        setTimeout(() => {
+            if (particle.parentNode) {
+                particle.parentNode.removeChild(particle);
+            }
+        }, 2000);
+    }
+}
+
+function createFireworks(count) {
+    for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            
+            // Random position
+            const posX = Math.random() * window.innerWidth;
+            const posY = Math.random() * window.innerHeight * 0.7; // Keep in upper 70% of screen
+            
+            firework.style.left = `${posX}px`;
+            firework.style.top = `${posY}px`;
+            
+            // Create particles
+            const particleCount = Math.floor(Math.random() * 20) + 30;
+            const colors = ['#FFEB3B', '#FFC107', '#FF9800', '#FF5722', '#E91E63', '#9C27B0', '#2196F3', '#4CAF50', '#8BC34A'];
+            
+            for (let j = 0; j < particleCount; j++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle-firework';
+                
+                // Random color
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Random direction
+                const angle = (j / particleCount) * 360 + (Math.random() * 30 - 15);
+                const distance = Math.random() * 100 + 50;
+                const translateX = Math.cos(angle * Math.PI / 180) * distance;
+                const translateY = Math.sin(angle * Math.PI / 180) * distance;
+                
+                particle.style.setProperty('--x', `${translateX}px`);
+                particle.style.setProperty('--y', `${translateY}px`);
+                
+                firework.appendChild(particle);
+            }
+            
+            document.body.appendChild(firework);
+            
+            // Play firework sound
+            const fireworkSound = document.getElementById('fireworkSound');
+            fireworkSound.currentTime = 0;
+            fireworkSound.play();
+            
+            // Remove firework after animation completes
+            setTimeout(() => {
+                if (firework.parentNode) {
+                    firework.parentNode.removeChild(firework);
+                }
+            }, 1500);
+        }, i * 300); // Stagger fireworks
+    }
+}
+</script>
+</body>
+</html>
